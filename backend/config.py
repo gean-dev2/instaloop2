@@ -111,6 +111,9 @@ class ProductionConfig(Config):
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or '967e561a954b541927ff56b1ca03237f9ca1abede1bf0d1d80b3d952054d181'
     ADMIN_ROUTE_SECRET = os.environ.get('ADMIN_ROUTE_SECRET') or 'Nj4SzW3JoQQ'
     SECRET_KEY = os.environ.get('SECRET_KEY') or '24ffbcb16d218148b229935b9019606ee345d8070bec2a6fa552046981520edf'
+    
+    # Debug log
+    print(f"🔧 PRODUCTION CONFIG - DATABASE_URL: {SQLALCHEMY_DATABASE_URI[:50]}...")
 
 class TestingConfig(Config):
     TESTING = True
