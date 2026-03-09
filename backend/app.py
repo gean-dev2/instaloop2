@@ -21,7 +21,10 @@ def create_app(config_name='development'):
     """
     Factory pattern para criação da aplicação com múltiplas camadas de segurança.
     """
-    app = Flask(__name__)
+    # Configurar instance_path antes de criar o app para Vercel
+    instance_path = '/tmp' if os.environ.get('VERCEL') else None
+    
+    app = Flask(__name__, instance_path=instance_path)
     
     # Configuração
     config_name = config_name or os.environ.get('FLASK_ENV', 'development')
@@ -29,8 +32,6 @@ def create_app(config_name='development'):
 
     # Em ambiente de produção (Vercel), configurar paths antes de tudo
     if os.environ.get('VERCEL'):
-        app.config['INSTANCE_PATH'] = '/tmp'  # Usar /tmp como instance path
-        
         # Exigir DATABASE_URL (Supabase)
         if not os.environ.get('DATABASE_URL'):
             raise ValueError("DATABASE_URL é obrigatório em produção. Configure Supabase.")
