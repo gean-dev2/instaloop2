@@ -2,8 +2,9 @@ import os
 from datetime import timedelta
 from dotenv import load_dotenv
 
-# Carregar variáveis de ambiente do arquivo .env
-load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
+# Carregar variáveis de ambiente do arquivo .env (apenas em desenvolvimento)
+if not os.environ.get('VERCEL'):
+    load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
 
 
 def _sqlite_abs_uri(filename: str) -> str:
