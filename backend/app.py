@@ -12,6 +12,7 @@ from routes.messages import messages_bp
 from routes.admin import register_admin_routes
 from routes.csrf import csrf_bp
 from routes.debug import debug_bp
+from routes.telemetry import telemetry_bp
 from utils.security import get_client_ip, validate_origin, validate_csrf_token
 from utils.honeypot import is_honeypot_route, handle_honeypot_request
 from utils.audit import log_security_event
