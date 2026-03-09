@@ -8,7 +8,7 @@ export default defineConfig({
     sourcemap: false,
     
     // Minificação agressiva com Terser
-    minify: 'terser',
+    minify: false, // Temporarily disabled to debug React error
     terserOptions: {
       compress: {
         // Remover todos os console.* (apenas em produção)
