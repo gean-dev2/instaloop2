@@ -462,3 +462,10 @@ if __name__ == '__main__':
         port=5000,
         debug=app.config.get('DEBUG', False)
     )
+
+# Handler para Vercel serverless
+if os.environ.get('VERCEL_ENV'):
+    from serverless_wsgi import handle_request
+    
+    def handler(event, context):
+        return handle_request(app, event, context)
