@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import os
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import (
     create_access_token, create_refresh_token, jwt_required, 
@@ -271,12 +272,15 @@ def login():
             }
         })
 
+        # Detectar ambiente para configurar SameSite corretamente
+        is_vercel = os.environ.get('VERCEL') or 'vercel' in current_app.config.get('SERVER_NAME', '')
+        
         response.set_cookie(
             'refresh_token',
             refresh_token,
             httponly=True,
-            secure=not current_app.debug,
-            samesite='Lax' if current_app.debug else 'Strict',
+            secure=True,  # Sempre secure em produção/vercel
+            samesite='None' if is_vercel else ('Lax' if current_app.debug else 'Strict'),
             max_age=int(current_app.config['JWT_REFRESH_TOKEN_EXPIRES'].total_seconds())
         )
 
@@ -361,12 +365,15 @@ def refresh():
         
         response = jsonify({"access_token": new_access_token})
         
+        # Detectar ambiente para configurar SameSite corretamente
+        is_vercel = os.environ.get('VERCEL') or 'vercel' in current_app.config.get('SERVER_NAME', '')
+        
         response.set_cookie(
             'refresh_token',
             new_refresh_token,
             httponly=True,
-            secure=not current_app.debug,
-            samesite='Lax' if current_app.debug else 'Strict',
+            secure=True,  # Sempre secure em produção/vercel
+            samesite='None' if is_vercel else ('Lax' if current_app.debug else 'Strict'),
             max_age=int(current_app.config['JWT_REFRESH_TOKEN_EXPIRES'].total_seconds())
         )
         

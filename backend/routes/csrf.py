@@ -14,12 +14,16 @@ def issue_csrf():
     token = generate_csrf_token()
 
     response = make_response(jsonify({"csrf_token": token}))
+    # Detectar ambiente para configurar SameSite corretamente
+    is_vercel = os.environ.get('VERCEL') or 'vercel' in current_app.config.get('SERVER_NAME', '')
+    is_production = not current_app.debug and not is_vercel
+    
     response.set_cookie(
         'csrf_token',
         token,
         httponly=True,
-        secure=not current_app.debug,
-        samesite='Lax' if current_app.debug else 'Strict',
+        secure=True,  # Sempre secure em produção/vercel
+        samesite='None' if is_vercel else ('Lax' if current_app.debug else 'Strict'),
         max_age=60 * 60,  # 1h
         path='/'
     )
