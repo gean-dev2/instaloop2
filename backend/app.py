@@ -28,7 +28,15 @@ def create_app(config_name='development'):
     app.config.from_object(config[config_name])
 
     # Inicializar extensões
-    db.init_app(app)
+    # Desabilitar criação automática de diretório instance em ambiente serverless
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    if not app.config.get('SQLALCHEMY_DATABASE_URI', '').startswith('sqlite'):
+        db.init_app(app)
+    else:
+        # Para SQLite em ambiente serverless, usar memória ou caminho temporário
+        if os.environ.get('VERCEL'):
+            app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
     limiter.init_app(app)
