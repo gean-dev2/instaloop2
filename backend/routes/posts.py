@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import or_, and_, desc, func
 from datetime import datetime
+import os
 
 from models import Post, Comment, Like, User, Follow, Block, Report
 from extensions import db
