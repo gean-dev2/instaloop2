@@ -138,7 +138,7 @@ def setup_security_middleware(app):
                 print(f"🔍 DEBUG: Validando origin para {request.path}")
                 print(f"🔍 DEBUG: Origin: {request.headers.get('Origin')}")
                 print(f"🔍 DEBUG: Referer: {request.headers.get('Referer')}")
-                print(f"🔍 DEBUG: CORS_ORIGINS: {current_app.config.get('CORS_ORIGINS', [])}")
+                print(f"🔍 DEBUG: CORS_ORIGINS: ['https://insta-loop.vercel.app', 'https://insta-loop-iufz.vercel.app', 'http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']")
                 
                 if not validate_origin(request):
                     print(f"❌ DEBUG: Origin validation FAILED")
