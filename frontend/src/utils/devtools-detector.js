@@ -310,31 +310,31 @@ if (import.meta.env.PROD) {
   // Congelar console
   Object.freeze(console)
   
-  // Iniciar detector
-  const devToolsDetector = new DevToolsDetector()
+  // Iniciar detector - DESABILITADO PARA EVITAR FALSOS POSITIVOS
+  // const devToolsDetector = new DevToolsDetector()
   
   // Disponibilizar globalmente para proteção
-  window.devToolsDetector = devToolsDetector
+  // window.devToolsDetector = devToolsDetector
   
   // Detectar tentativas de acessar variáveis internas
   let inspectionCount = 0
   const maxInspections = 5
   
-  const originalDescriptor = Object.getOwnPropertyDescriptor(window, 'devToolsDetector')
-  Object.defineProperty(window, 'devToolsDetector', {
-    get: function() {
-      inspectionCount++
+  // const originalDescriptor = Object.getOwnPropertyDescriptor(window, 'devToolsDetector')
+  // Object.defineProperty(window, 'devToolsDetector', {
+  //   get: function() {
+  //     inspectionCount++
       
-      if (inspectionCount > maxInspections) {
-        devToolsDetector.takeDrasticAction()
-      }
+  //     if (inspectionCount > maxInspections) {
+  //       devToolsDetector.takeDrasticAction()
+  //     }
       
-      devToolsDetector.reportToBackend('variable_inspection')
-      return originalDescriptor.value
-    },
-    configurable: false,
-    enumerable: false
-  })
+  //     devToolsDetector.reportToBackend('variable_inspection')
+  //     return originalDescriptor.value
+  //   },
+  //   configurable: false,
+  //   enumerable: false
+  // })
   
   // Detectar acessos a propriedades sensíveis
   const sensitiveProps = ['accessToken', 'token', 'auth', 'user']
@@ -344,10 +344,10 @@ if (import.meta.env.PROD) {
     Object.defineProperty(window, prop, {
       get: function() {
         propAccessCount++
-        devToolsDetector.reportToBackend(`sensitive_property_access_${prop}`)
+        // devToolsDetector.reportToBackend(`sensitive_property_access_${prop}`)
         
         if (propAccessCount > 3) {
-          devToolsDetector.takeDrasticAction()
+          // devToolsDetector.takeDrasticAction()
         }
         
         return undefined
@@ -360,7 +360,7 @@ if (import.meta.env.PROD) {
   // Proteger contra eval
   const originalEval = window.eval
   window.eval = function(code) {
-    devToolsDetector.reportToBackend('eval_attempt')
+    // devToolsDetector.reportToBackend('eval_attempt')
     
     if (code.includes('devToolsDetector') || code.includes('console')) {
       return undefined
@@ -377,8 +377,8 @@ if (import.meta.env.PROD) {
         
         // Detectar tentativas de remover estilos de proteção
         const element = mutation.target
-        if (element.style && element.style.filter === 'none' && devToolsDetector.warningCount > 0) {
-          devToolsDetector.reportToBackend('style_manipulation')
+        if (element.style && element.style.filter === 'none' /* && devToolsDetector.warningCount > 0 */) {
+          // devToolsDetector.reportToBackend('style_manipulation')
           element.style.filter = 'blur(5px)'
         }
       }
@@ -393,7 +393,7 @@ if (import.meta.env.PROD) {
   
   // Cleanup ao sair da página
   window.addEventListener('beforeunload', () => {
-    devToolsDetector.stop()
+    // devToolsDetector.stop()
   })
 }
 
