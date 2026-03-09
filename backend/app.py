@@ -27,20 +27,9 @@ def create_app(config_name='development'):
     
     app = Flask(__name__, instance_path=instance_path)
     
-    # Em ambiente de produção (Vercel), configurar paths antes de tudo
-    if os.environ.get('VERCEL'):
-        app.config['INSTANCE_PATH'] = '/tmp'  # Usar /tmp como instance path
-        
-        # Exigir DATABASE_URL (Supabase)
-        database_url = os.environ.get('DATABASE_URL')
-        print(f"🔍 DEBUG: DATABASE_URL from env: {database_url[:50] + '...' if database_url else 'NOT_SET'}")
-        
-        if not database_url:
-            raise ValueError("DATABASE_URL é obrigatório em produção. Configure Supabase.")
-        
-        # Forçar configuração do banco ANTES de carregar config object
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-        print(f"🔍 DEBUG: SQLALCHEMY_DATABASE_URI set to: {app.config['SQLALCHEMY_DATABASE_URI'][:50] + '...'}")
+    # Em ambiente de produção (Vercel), exigir DATABASE_URL (Supabase)
+    if os.environ.get('VERCEL') and not os.environ.get('DATABASE_URL'):
+        raise ValueError("DATABASE_URL é obrigatório em produção. Configure Supabase.")
 
     # Configuração
     config_name = config_name or os.environ.get('FLASK_ENV', 'development')

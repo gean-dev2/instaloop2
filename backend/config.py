@@ -12,8 +12,15 @@ def _sqlite_abs_uri(filename: str) -> str:
     return f"sqlite:///{path}"
 
 class Config:
-    # Banco de dados
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or _sqlite_abs_uri('instaloop.db')
+    # Banco de dados - PostgreSQL em produção, SQLite em desenvolvimento
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url:
+        # Produção: usar PostgreSQL
+        SQLALCHEMY_DATABASE_URI = database_url
+    else:
+        # Desenvolvimento: usar SQLite local
+        SQLALCHEMY_DATABASE_URI = _sqlite_abs_uri('instaloop.db')
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # JWT
