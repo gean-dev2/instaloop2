@@ -13,6 +13,10 @@
     }
   ],
   "env": {
-    "FLASK_ENV": "production"
+    "FLASK_ENV": "production",
+    "JWT_SECRET_KEY": "dummy-jwt-secret-for-vercel-deployment",
+    "ADMIN_ROUTE_SECRET": "dummy-admin-route-secret",
+    "SECRET_KEY": "dummy-secret-key-for-vercel",
+    "DATABASE_URL": "sqlite:///tmp/instaloop.db"
   }
 }
