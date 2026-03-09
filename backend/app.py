@@ -11,7 +11,7 @@ from routes.posts import posts_bp
 from routes.messages import messages_bp
 from routes.admin import register_admin_routes
 from routes.csrf import csrf_bp
-from routes.telemetry import telemetry_bp
+from routes.debug import debug_bp
 from utils.security import get_client_ip, validate_origin, validate_csrf_token
 from utils.honeypot import is_honeypot_route, handle_honeypot_request
 from utils.audit import log_security_event
@@ -82,6 +82,7 @@ def create_app(config_name='development'):
     app.register_blueprint(reports_bp)
     app.register_blueprint(csrf_bp)
     app.register_blueprint(telemetry_bp)
+    app.register_blueprint(debug_bp)
     
     # Registrar rotas admin com caminho secreto
     register_admin_routes(app)
