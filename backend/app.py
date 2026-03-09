@@ -27,20 +27,22 @@ def create_app(config_name='development'):
     config_name = config_name or os.environ.get('FLASK_ENV', 'development')
     app.config.from_object(config[config_name])
 
-    # Configurar SQLite para usar /tmp na Vercel (sistema de arquivos gravável)
-    if os.environ.get('VERCEL') and app.config.get('SQLALCHEMY_DATABASE_URI', '').startswith('sqlite'):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/instaloop.db'
+    # Em ambiente de produção (Vercel), exigir DATABASE_URL (Supabase)
+    if os.environ.get('VERCEL') and not os.environ.get('DATABASE_URL'):
+        raise ValueError("DATABASE_URL é obrigatório em produção. Configure Supabase.")
 
     # Inicializar extensões
     # Desabilitar criação automática de diretório instance em ambiente serverless
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['INSTANCE_PATH'] = '/tmp'  # Usar /tmp como instance path
+    if os.environ.get('VERCEL'):
+        app.config['INSTANCE_PATH'] = '/tmp'  # Usar /tmp como instance path
     
     db.init_app(app)
     
-    # Criar tabelas automaticamente na Vercel
-    with app.app_context():
-        db.create_all()
+    # Criar tabelas automaticamente (apenas em desenvolvimento ou se não existirem)
+    if not os.environ.get('VERCEL'):
+        with app.app_context():
+            db.create_all()
     
     migrate.init_app(app, db)
     jwt.init_app(app)
