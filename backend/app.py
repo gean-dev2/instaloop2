@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, g, send_from_directory
 
 from config import config
 from extensions import db, migrate, jwt, limiter, cors
+csrf = CSRFProtect()
 from flask_wtf.csrf import CSRFProtect
 csrf = CSRFProtect()
 from models import User
