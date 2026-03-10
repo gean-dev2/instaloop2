@@ -27,11 +27,24 @@ sys.path.insert(0, str(backend_dir))
 # Importar e criar a aplicação
 from app import create_app
 
+print("🔍 DEBUG: Importing blueprints...")
+try:
+    from routes.auth import auth_bp
+    print(f"✅ auth_bp imported with {len(auth_bp.deferred_functions) if hasattr(auth_bp, 'deferred_functions') else 'unknown'} routes")
+except Exception as e:
+    print(f"❌ Error importing auth_bp: {e}")
+
 # Criar instância da aplicação para ambiente serverless
 app = create_app('production')
 
 print("✅ APP CREATED SUCCESSFULLY")
 print(f"🔧 APP DATABASE_URI: {app.config.get('SQLALCHEMY_DATABASE_URI', 'NOT_FOUND')[:50]}...")
+
+# Debug: mostrar rotas registradas
+print("\n=== ROTAS REGISTRADAS ===")
+for rule in app.url_map.iter_rules():
+    print(f"  {rule.rule} -> {rule.endpoint} [{', '.join(rule.methods)}]")
+print("========================\n")
 
 # Exportar para Vercel
 # Vercel espera uma variável 'app' ou 'handler' no módulo principal
