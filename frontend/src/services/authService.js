@@ -284,4 +284,9 @@ class AuthService {
 // Instância singleton
 const authService = new AuthService()
 
+// Export nomeado para garantir que register esteja no bundle (evita tree-shake em alguns builds)
+export async function register(data) {
+  return authService.register(data)
+}
+
 export default authService

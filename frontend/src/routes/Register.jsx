@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import authService from '../services/authService.js'
+import authService, { register as doRegister } from '../services/authService.js'
 import PublicShell from '../components/layout/PublicShell.jsx'
 import TextField from '../components/ui/TextField.jsx'
 import Button from '../components/ui/Button.jsx'
@@ -21,7 +21,7 @@ export default function Register() {
     setDetails([])
     setLoading(true)
     try {
-      await authService.register({ username, email, password })
+      await doRegister({ username, email, password })
       navigate('/login')
     } catch (err) {
       setError(err.message || 'Falha no cadastro')
