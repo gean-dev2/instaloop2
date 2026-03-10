@@ -122,6 +122,18 @@ class AuthService {
     }
   }
 
+  // Registro
+  async register({ username, email, password }) {
+    try {
+      await this.ensureCsrfToken()
+      const response = await this.api.post('/api/auth/register', { username, email, password })
+      return response.data
+    } catch (error) {
+      const handled = this.handleError(error)
+      throw Object.assign(new Error(handled.message), { details: handled.details || [] })
+    }
+  }
+
   // Login
   async login(credentials) {
     try {
