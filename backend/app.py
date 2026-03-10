@@ -52,13 +52,13 @@ def create_app(config_name='development'):
     cors.init_app(
         app,
         resources={
-            r"/api/*": {"origins": app.config['CORS_ORIGINS']},
-            r"/admin123/*": {"origins": app.config['CORS_ORIGINS']}
+            r"/*": {"origins": app.config['CORS_ORIGINS']}
         },
         supports_credentials=True,
         allow_headers=[
             "Content-Type",
             "Authorization",
+            "X-Requested-With",
             "X-CSRF-Token",
         ],
         expose_headers=[

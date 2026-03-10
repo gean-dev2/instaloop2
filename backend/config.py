@@ -62,7 +62,7 @@ class Config:
     RATELIMIT_STORAGE_URL = os.environ.get('RATELIMIT_STORAGE_URL', 'memory://')
     
     # CORS
-    CORS_ORIGINS = ["http://localhost:5173", "http://localhost:3000", "http://localhost:5174", "https://insta-loop.vercel.app", "https://insta-loop-iufz.vercel.app"]
+    CORS_ORIGINS = ["http://localhost:5173", "http://localhost:3000", "http://localhost:5174", "https://insta-loop.vercel.app", "https://insta-loop-iufz.vercel.app", "https://instaloop2.vercel.app"]
     
     # Segurança
     SECRET_KEY = os.environ.get('SECRET_KEY') or os.environ.get('JWT_SECRET_KEY')
